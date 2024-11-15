@@ -1,0 +1,30 @@
+################################################################################
+
+#
+
+#   DESCRIPTION
+
+#   EC2 ECS cluster running containers in a private subnet. Supports public 
+
+#   facing load balancers, private internal load balancers, and both internal 
+
+#   and external service discovery namespaces. Two AZs.   
+
+################################################################################
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  rECRRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: hello-server
+
+  rECRRepoParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: ECR Repository
+      Name: ecr-repo-name
+      Type: String
+      Value: !Ref rECRRepo
+
+
+  
