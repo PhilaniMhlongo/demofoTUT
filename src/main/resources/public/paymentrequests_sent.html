@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="header.html">
+    <title>This will be replaced</title>
+</head>
+<body>
+<div th:replace="nav.html">Navigation goes here!</div>
+<main>
+    <section>
+        <h2>People that owe me</h2>
+        <p id="no_payment_requests_sent" th:if="${#lists.isEmpty(paymentrequests)}">Nobody owes you anything!</p>
+        <table id="paymentrequests_sent" th:unless="${#lists.isEmpty(paymentrequests)}">
+            <thead>
+            <tr>
+                <th>Who</th>
+                <th>What</th>
+                <th>Due In (days)</th>
+                <th class="money">How Much</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="paymentrequest,iterStat: ${paymentrequests}">
+                <tr th:id="'paymentrequest_' + ${iterStat.count}">
+                    <td class="text" th:text="${paymentrequest.personWhoShouldPayBack.name}">Student2</td>
+                    <td class="text" th:text="${paymentrequest.expense.description}">Lunch</td>
+                    <td class="date" th:text="${paymentrequest.daysLeftToPay}">5</td>
+                    <td class="money" th:text="${paymentrequest.amountToPay}">ZAR 150</td>
+                    <td class="text" th:text="${paymentrequest.paid}?'✅':''">paid</td>
+                </tr>
+            </th:block>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">Total Unpaid</td>
+                <td id="grand_total" th:text="${unpaid_total}">ZAR 100</td>
+            </tr>
+            </tfoot>
+        </table>
+    </section>
+</main>
+</body>
+
+</html>

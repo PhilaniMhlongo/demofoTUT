@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="header.html">
+    <title>This will be replaced</title>
+</head>
+<body>
+<div th:replace="nav.html">Navigation goes here!</div>
+<main>
+    <section>
+        <h2>Submit a payment request for the following expense</h2>
+
+        <table>
+            <tbody>
+            <tr>
+                <td><strong>Date</strong></td>
+                <td id="expense_date" class="expenseDate" th:text="${expense.date}">2021/10/01</td>
+            </tr>
+            <tr>
+                <td><strong>Description</strong></td>
+                <td id="expense_description" th:text="${expense.description}">Lunch</td>
+            </tr>
+            <tr>
+                <td><strong>Amount</strong></td>
+                <td id="expense_amount" th:text="${expense.amount}">100.00</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <br/>
+    <section id="paymentrequest_section"
+             th:style="${(expense.listOfPaymentRequests.size eq 0)? 'display:none' : 'display:block'}">
+        <h2>Previous Payment Requests for this expense</h2>
+        <table id="paymentrequests">
+            <thead>
+            <tr>
+                <th>Who</th>
+                <th>Due</th>
+                <th>Paid?</th>
+                <th>How Much</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="paymentrequest: ${expense.listOfPaymentRequests}">
+                <td class="text" th:id="'paymentrequest_who_' + ${paymentrequest.id}"
+                    th:text="${paymentrequest.personWhoShouldPayBack.name}">Mike
+                </td>
+                <td class="date" th:id="'paymentrequest_date_' + ${paymentrequest.id}"
+                    th:text="${paymentrequest.dueDate}">2021/11/15
+                </td>
+                <td class="text" th:id="'paymentrequest_paid_' + ${paymentrequest.id}"
+                    th:text="${paymentrequest.paid}?'Yes':'No'">no
+                </td>
+                <td class="money" th:id="'paymentrequest_amount_' + ${paymentrequest.id}"
+                    th:text="${paymentrequest.amountToPay}">150.00
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">Total Amount of Payments Requested</td>
+                <td id="total_paymentrequests" class="total"
+                    th:text="${expense.totalAmountOfPaymentsRequested}">200.00
+                </td>
+            </tfoot>
+        </table>
+    </section>
+    <br/>
+    <section th:if="${expense.totalAmountAvailableForPaymentRequests.number > 0}">
+        <form id="paymentrequest_form" enctype="application/x-www-form-urlencoded" method="post"
+              th:action="@{/app/paymentrequest.action}">
+            <label for="email">The email address of the person that should pay you</label>
+            <input id="email" type="email" name="email"/>
+            <label id="amount_label" for="amount"
+                   th:text="'The amount they should pay (maximum '+ ${expense.totalAmountAvailableForPaymentRequests} + '!)'">Amount</label>
+            <input id="amount" type="number" name="amount">
+            <label for="due_date">By when must this claim be settled (dd/mm/yyyy)</label>
+            <input name="due_date" id="due_date" type="text" required>
+            <input id="expense_id" name="expense_id" type="hidden" th:value="${expense.id}"/>
+            <input id="submit" type="submit" value="Submit"/>
+        </form>
+    </section>
+</main>
+
+</body>
+
+</html>

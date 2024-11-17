@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header.html">
+    <title>This will be replaced</title>
+</head>
+<body>
+<div th:replace="nav.html">Navigation goes here!</div>
+<main>
+    <section class="expenseList">
+        <h2>My Expenses</h2>
+        <a id="add_expense" href="/app/newexpense">Add a new expense</a>
+
+        <p id="no_expenses" th:if="${#lists.isEmpty(expenses)}">You don't have any expenses!</p>
+
+        <table id="expenses" th:unless="${#lists.isEmpty(expenses)}">
+            <thead>
+            <tr>
+                <th>When</th>
+                <th>What</th>
+                <th>Amount Spent</th>
+                <th>Payments Requested</th>
+                <th>Payments Received</th>
+                <th>Nett Expense</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="expense: ${expenses}">
+                <tr th:unless="${expense.isFullyPaidByOthers}">
+                    <td class="date" th:id="'date_' + ${expense.id}" th:text="${expense.date}">2021/10/21</td>
+                    <td class="text">
+                        <a th:id="'payment_request_' + ${expense.id}"
+                           href="#" th:href="@{/app/paymentrequest(expenseId=${expense.id})}"
+                           th:text="${expense.description}">Lunch</a>
+                    </td>
+                    <td class="money" th:id="'amount_' + ${expense.id}"
+                        th:text="${expense.amount}">200
+                    </td>
+                    <td class="money" th:id="'request_' + ${expense.id}"
+                        th:text="${expense.totalAmountOfPaymentsRequested}">200
+                    </td>
+                    <td class="money" th:id="'received_' + ${expense.id}"
+                        th:text="${expense.totalAmountForPaymentsReceived}">200
+                    </td>
+                    <td class="money" th:id="'nett_' + ${expense.id}"
+                        th:text="${expense.amountLessPaymentsReceived}">200
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5">Total Expenses</td>
+                <td id="grand_total"
+                    th:text="${grandTotal}">200.00
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </section>
+</main>
+</body>
+
+</html>

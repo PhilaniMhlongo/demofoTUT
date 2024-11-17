@@ -1,0 +1,8 @@
+<h1>WeShare</h1>
+<p id="user" th:text="${session.user.email}">person@domain.com</p>
+<nav>
+    <a id="expenses" href="/app/expenses">Expenses</a>
+    <a id="paymentrequests_sent" href="/app/paymentrequests_sent">Payment Requests Sent</a>
+    <a id="paymentrequests_received" href="/app/paymentrequests_received">Payment Request Received</a>
+    <a href="/app/logout" id="logout" th:text="'Logout ' + ${session.user.name}">Logout Person</a>
+</nav>

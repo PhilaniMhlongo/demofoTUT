@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="header.html">
+    <title>This will be replaced</title>
+</head>
+<body>
+<div th:replace="nav.html">Navigation goes here!</div>
+<main>
+    <form id="expense_form" enctype="application/x-www-form-urlencoded" method="post"
+          th:action="@{/app/expense.action}">
+        <label for="description">Description</label>
+        <input name="description" id="description" type="text" autofocus required>
+
+        <label for="date">Date (dd/mm/yyyy e.g. 21/10/2021)</label>
+        <input name="date" id="date" type="text" required>
+
+        <label for="amount">Amount (no cents allowed)</label>
+        <input name="amount" id="amount" type="number" required>
+
+        <input id="submit" type="submit" value="Submit"/>
+    </form>
+</main>
+</body>
+
+</html>

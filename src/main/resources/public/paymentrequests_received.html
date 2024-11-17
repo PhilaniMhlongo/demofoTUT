@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="header.html">
+    <title>This will be replaced</title>
+</head>
+<body>
+<div th:replace="nav.html">Navigation goes here!</div>
+<main>
+    <section>
+        <h2>People that you owe </h2>
+        <p id="no_payment_requests_received" th:if="${#lists.isEmpty(paymentrequests)}">You don't owe anyone
+            anything!</p>
+        <table id="paymentrequests_received" th:unless="${#lists.isEmpty(paymentrequests)}">
+            <thead>
+            <tr>
+                <th>Who</th>
+                <th>What</th>
+                <th>Due In (days)</th>
+                <th class="money">How Much</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="paymentrequest,iterStat: ${paymentrequests}">
+                <tr th:id="'paymentrequest_' + ${iterStat.count}">
+                    <td class="text" th:text="${paymentrequest.expense.person.name}">Student2</td>
+                    <td class="text" th:text="${paymentrequest.expense.description}">Lunch</td>
+                    <td class="date" th:text="${paymentrequest.daysLeftToPay}">5</td>
+                    <td class="money" th:text="${paymentrequest.amountToPay}">ZAR 150</td>
+                    <td th:unless="${paymentrequest.paid}">
+                        <form class="inline" enctype="application/x-www-form-urlencoded" method="post"
+                              th:action="@{/app/payment.action}">
+                            <input type="hidden" id="paymentrequest_id" name="paymentrequest_id"
+                                   th:value="${paymentrequest.id}"/>
+                            <input type="hidden" id="expense_id" name="expense_id"
+                                   th:value="${paymentrequest.expense.id}"/>
+                            <input class="inline" type="submit" id="submit" value="Pay"/>
+                        </form>
+                    </td>
+                    <td class="text" th:id="'paid_' + ${iterStat.count}" th:if="${paymentrequest.paid}">✅</td>
+                </tr>
+            </th:block>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">Total Unpaid</td>
+                <td id="grand_total" th:text="${unpaid_total}">ZAR 100</td>
+            </tr>
+            </tfoot>
+        </table>
+    </section>
+</main>
+</body>
+
+</html>
